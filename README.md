@@ -1,10 +1,10 @@
-# Nexora X3: A High-Performance Heterogeneous AI SoC
+Nexora X3: A High-Performance Heterogeneous AI SoC
 
 Nexora X3 is a high-performance, heterogeneous System-on-Chip (SoC) written in SystemVerilog. Built from the ground up for ASIC implementations, Nexora X3 integrates multi-core RISC-V Out-of-Order (OoO) CPUs, SIMT GPU clusters, Systolic-Array-based Tensor processing units, a 4x4 mesh Network-on-Chip (NoC), and an AXI4-compliant HBM cache-coherent memory subsystem with Processing-In-Memory (PIM) capabilities.
 
 ---
 
-## 🚀 Key Features & Architecture
+Key Features & Architecture
 
 ```
                                   Nexora X3 SoC Top
@@ -33,33 +33,33 @@ Nexora X3 is a high-performance, heterogeneous System-on-Chip (SoC) written in S
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 🧠 1. Out-of-Order RISC-V CPU Cores (4 Clusters)
-* **Execution Paradigm:** Out-of-Order (OoO) execution utilizing Reorder Buffers (ROBs), Reservation Stations, and instruction dispatch queues.
-* **Microarchitecture:** 4-wide superscalar dispatch pipeline (`ISSUE_WIDTH = 4`), up to 16 parallel ALU execution units, dynamic load-store units (LSUs), and branch prediction units.
-* **Hierarchy:** 4 CPU clusters connected via a local quad-arbiter interface, feeding into the global NoC.
+1. Out-of-Order RISC-V CPU Cores (4 Clusters)
+* Execution Paradigm: Out-of-Order (OoO) execution utilizing Reorder Buffers (ROBs), Reservation Stations, and instruction dispatch queues.
+* Microarchitecture:4-wide superscalar dispatch pipeline (`ISSUE_WIDTH = 4`), up to 16 parallel ALU execution units, dynamic load-store units (LSUs), and branch prediction units.
+* Hierarchy: 4 CPU clusters connected via a local quad-arbiter interface, feeding into the global NoC.
 
-### 🎮 2. SIMT GPU Clusters (8 Clusters)
-* **Execution Model:** Single Instruction, Multiple Threads (SIMT) running 4 warps × 32 threads per warp (128 concurrent threads per cluster, 1024 threads total).
-* **Datapath:** Per-lane parallel execution lanes, scoreboard-based hazard detection/interlocking, and Local Data Share (LDS) scratchpad memory.
-* **PIM Integration:** Native instruction-level support for delegating HBM Processing-In-Memory (PIM) operations directly from the GPU wavefront.
+2. SIMT GPU Clusters (8 Clusters)
+* Execution Model:Single Instruction, Multiple Threads (SIMT) running 4 warps × 32 threads per warp (128 concurrent threads per cluster, 1024 threads total).
+* Datapath:Per-lane parallel execution lanes, scoreboard-based hazard detection/interlocking, and Local Data Share (LDS) scratchpad memory.
+* PIM Integration: Native instruction-level support for delegating HBM Processing-In-Memory (PIM) operations directly from the GPU wavefront.
 
-### 📐 3. Systolic-Array Tensor Clusters (4 Clusters)
-* **Compute Engine:** Matrix-Multiplication acceleration driven by an $8 \times 8$ Systolic Array Processing Element (PE) matrix (8-bit weights/activations, 32-bit accumulation).
-* **Memory Buffer:** On-chip weight buffers, activation buffers, and double-buffered result registers to hide DRAM read latency.
+3. Systolic-Array Tensor Clusters (4 Clusters)
+* Compute Engine: Matrix-Multiplication acceleration driven by an $8 \times 8$ Systolic Array Processing Element (PE) matrix (8-bit weights/activations, 32-bit accumulation).
+* Memory Buffer: On-chip weight buffers, activation buffers, and double-buffered result registers to hide DRAM read latency.
 
-### 🌐 4. 4x4 Mesh Network-on-Chip (NoC)
-* **Topology:** 2D grid structure connecting CPU, GPU, Tensor, DSP, and memory fabric.
-* **Routing Scheme:** XY dimension-ordered routing with multi-virtual-channel (VC) buffers to guarantee deadlock-free packet traversal.
-* **Transport:** Packetized flit-based transactions (Head, Body, Tail flits) supporting prioritized traffic classes.
+4. 4x4 Mesh Network-on-Chip (NoC)
+* Topology: 2D grid structure connecting CPU, GPU, Tensor, DSP, and memory fabric.
+* Routing Scheme: XY dimension-ordered routing with multi-virtual-channel (VC) buffers to guarantee deadlock-free packet traversal.
+* Transport: Packetized flit-based transactions (Head, Body, Tail flits) supporting prioritized traffic classes.
 
-### 💾 5. HBM & Directory-Based Coherent Memory
-* **High-Bandwidth Memory:** 128-bit wide AXI4 HBM interface.
-* **Coherence Protocol:** Directory-based MESI (Modified, Exclusive, Shared, Invalid) hardware cache coherence across CPU and GPU cache hierarchies.
-* **PIM (Processing-in-Memory):** In-memory ALU/vector engines to execute bulk data arithmetic directly inside the HBM fabric, minimizing data movement.
+5. HBM & Directory-Based Coherent Memory
+* High-Bandwidth Memory: 128-bit wide AXI4 HBM interface.
+* Coherence Protocol: Directory-based MESI (Modified, Exclusive, Shared, Invalid) hardware cache coherence across CPU and GPU cache hierarchies.
+* PIM (Processing-in-Memory): In-memory ALU/vector engines to execute bulk data arithmetic directly inside the HBM fabric, minimizing data movement.
 
 ---
 
-## 📂 Directory Layout
+Directory Layout
 
 ```
 ├── rtl/
@@ -84,23 +84,22 @@ Nexora X3 is a high-performance, heterogeneous System-on-Chip (SoC) written in S
 │
 ├── run_lint.tcl        # Vivado RTL compilation check (Linting)
 ├── run_synth_full.tcl  # Full SoC Vivado synthesis wrapper
-└── run_synth.tcl       # Lite-build Vivado synthesis script
+└── run_synth.tcl       # Lite-build Vivado synthesis script(.tcl are not added here , if anyone need it please raise  a issue)
 ```
 
 ---
-
-## 🛠️ Compilation & RTL Linting
+Compilation & RTL Linting
 
 The Nexora X3 codebase is developed with standard SystemVerilog, ensuring compatibility with major ASIC synthesis tools (e.g., Synopsys Design Compiler, Cadence Genus) and FPGA compilers (Xilinx Vivado).
 
-### 🔍 Running RTL Elaboration/Lint (Vivado)
+Running RTL Elaboration/Lint (Vivado)
 To run a fast RTL elaboration to verify syntax correctness, interface mappings, and packaging:
 ```powershell
 vivado -mode batch -nojournal -nolog -source run_lint.tcl
 ```
 This loads `nexora_x3_pkg.sv` and compiles all sub-modules to perform RTL Elaboration on `nexora_x3_soc_top`.
 
-### ⚡ Out-of-Context Synthesis
+Out-of-Context Synthesis
 To run full out-of-context synthesis for timing and resource estimation:
 ```powershell
 vivado -mode batch -nojournal -nolog -source run_synth_full.tcl
@@ -108,7 +107,7 @@ vivado -mode batch -nojournal -nolog -source run_synth_full.tcl
 
 ---
 
-## 🧪 Simulation & Verification
+Simulation & Verification
 
 The `verification/` folder contains a comprehensive suite of self-checking testbenches.
 
@@ -127,7 +126,7 @@ To run these testbenches in Vivado Simulator (xsim):
 
 ---
 
-## ⚠️ Vivado Array Elaboration Limits Note (ASIC vs. Tooling)
+Vivado Array Elaboration Limits Note (ASIC vs. Tooling)
 
 > [!NOTE]  
 > Because Nexora X3 is designed for **ASIC tape-out**, the default configurations use substantial cache footprints (e.g., 128KB L1 cache per core and 4MB shared L2 cache).
@@ -140,14 +139,16 @@ To run these testbenches in Vivado Simulator (xsim):
 
 ---
 
-## 🤝 Contributing
-
+Contributing
+It's a solo project of mine . I love to code RTL and hardwares although :
 Contributions are welcome! Please ensure any code changes:
 1. Are fully compliant with standard SystemVerilog (avoid vendor-specific primitives).
 2. Pass the standard linter check (`run_lint.tcl`).
 3. Include an updated/new self-checking testbench if adding new hardware blocks.
 
 ---
+License
+This project is licensed under the MIT License 2.0. See the `LICENSE` file for details.
 
-## 📄 License
-This project is licensed under the Apache License 2.0. See the `LICENSE` file for details.
+
+Wating for the PR Guys!
