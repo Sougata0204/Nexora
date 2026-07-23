@@ -1,4 +1,4 @@
-// nexora_x3_soc_top
+// nexora_x3_soc_top, this is the top module of this design.
 `timescale 1ns / 1ps
 module nexora_x3_soc_top (
     input  logic clk,
